@@ -1,0 +1,216 @@
+﻿
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";   
+ }
+    
+
+@using EAD_Project.Models
+
+
+@{
+    
+    if (Session["userName"] == null || Session["password"] == null)
+    {
+        Response.Redirect("/Admin/errorPage/");
+    }
+    
+    String stuId = Request["userName"];
+    String classId = Request["classId"];
+
+    MyClassEntities cntxt = new MyClassEntities();
+    Student stu = cntxt.Students.First(x=>x.StudentID==stuId);
+    
+}
+    
+    <header>
+    <!--WebSite Header-->
+    <div class="well well-sm">
+        <div class="row">
+            <div class="col-sm-1"></div>
+            <div class="col-sm-7"><h1><strong>My Class<small>.com</small></strong></h1></div>
+            <div class="col-sm-1"> <strong> <a style="font-size:x-large" href="/Student/StudentProfile/?id=@stuId">@stu.Name</a> </strong> </div>
+            <div class="col-sm-1"> <strong> <a style="font-size:x-large" href="#" onclick="goToHome()">Log Out</a> </strong> </div>
+         </div>
+        
+
+
+        <div class="row">
+            <div class="col-sm-4"></div>
+            <div class="col-sm-4">
+               
+               
+            <ul class="nav navbar-nav">
+                
+
+                @{
+                    
+                    
+                    var stuClassList = cntxt.StuClasses.Where(x=>x.StuID==stu.StudentID).ToList();
+
+                    List<Class> list = new List<Class>();
+                   
+                    foreach(StuClass stc in stuClassList){
+
+                        Class c = cntxt.Classes.First(x=>x.ClassId == stc.ClassID);
+                        list.Add(c);
+                        
+                    }
+                    
+                    
+                  
+                   
+                    
+                    
+                    foreach(Class c in list)
+                    {
+
+                        String un = stuId;    
+                     
+                    <li><a href="/Student/StudentHome/?userName=@un&classId=@c.ClassId"> @c.Name </a></li>
+                    }
+                 }
+    
+                </ul>
+            </div>
+            
+        </div>
+
+
+    </div>
+    </header>
+
+
+
+                <!--Lecture List Panel-->
+    <div class="row">
+        
+
+        <!-- Coloumn 1 In which Lecture list will load-->
+        <div class="col-sm-3">
+            <div class="panel panel-info">
+             <div class="panel-heading"><p style="font-size:large"><h3>Lectures</h3> 
+
+
+             </div>
+             <div class="panel-body" style = "min-height:430px; max-height:500px; overflow-y:scroll">
+                 <!--List is here-->
+                 
+                 <ul>
+                @{
+                    var lecs = cntxt.Lectures.Where(x=>x.ClassID==classId).ToList();
+                   
+                    
+                    
+                    foreach(Lecture lec in lecs)
+                    {
+
+                        String un = stuId;    
+                     
+                    <li><a href="/Student/StudentHome/?userName=@stuId&classId=@classId&lec_path=@lec.Name"> @lec.Name </a></li>
+                    }
+                    
+                 }
+                </ul>
+
+
+             </div>
+             </div>
+        </div>
+
+
+
+
+
+
+        <!-- Coloumn 2 In which Lecture will load (pdf)-->
+        <div class="col-sm-6">
+            <div class="panel panel-info">
+             <div class="panel-heading"><h3>Currently Loaded Lecture</h3> </div>
+             <div class="panel-body" style = "min-height:430px; max-height:500px; overflow-y:scroll">
+                 
+                  @{
+                     String path = Request["lec_path"];
+                     
+                    <embed src="~/Files/@path" width=1000px height=1200px/>     
+                  }
+
+
+             </div>
+             </div>
+         
+        </div>
+
+
+
+
+
+
+
+        <!-- Coloumn 3 In which Notifications list will load-->
+        <div class="col-sm-3">
+            <div class="panel panel-info">
+             <div class="panel-heading"><h3>Announcments</h3> </div>
+             <div class="panel-body" style = "min-height:430px; max-height:500px; overflow-y:scroll">
+                 <!--Notifications are here-->
+                 
+                                  <ul>
+              @{
+                  var anns = cntxt.Announcments.Where(x => x.ClassID == classId).ToList();
+
+
+
+                  foreach (Announcment ans in anns)
+                  {
+
+                         
+                     
+                    <li><b> @ans.Announment </b> </li>
+                  }
+                    
+                 }
+
+                </ul>
+
+
+             </div>
+             </div>
+        </div>
+
+
+
+
+    </div>
+
+
+
+
+     
+
+
+
+
+
+
+
+
+
+
+
+    <!--Here are Scripts-->
+
+    <script>
+
+        function goToStudentProfile() {
+                window.location = "/Student/StudentProfile/";
+        }
+
+
+        function goToHome() {
+
+
+            window.location = "http://localhost:26662/";
+
+        }
+
+    </script>

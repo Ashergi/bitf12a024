@@ -1,0 +1,259 @@
+﻿@{
+    ViewBag.Title = "Class";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    if (Session["userName"] == null || Session["password"] == null)
+    {
+
+        Response.Redirect("/Admin/errorPage/");
+    }
+}
+
+
+
+@using EAD_Project.Models
+
+@{
+    MyClassEntities cntxt = new MyClassEntities();
+    List<Class> list = cntxt.Classes.ToList();
+}
+
+
+<header>
+    <!--WebSite Header-->
+    <div class="well well-sm">
+        <div class="row">
+            <div class="col-sm-1"></div>
+            <div class="col-sm-7"><h1><strong>My Class<small>.com</small></strong></h1></div>
+            <div class="col-sm-1"> <strong> <a style="font-size:x-large" href="/Home/Index/" onclick="goToHome()">Log Out</a> </strong> </div>
+         </div>
+
+        <ul class="nav nav-pills">
+        <li><a href="/Admin/AdminDashBoard/">DashBoard</a></li>
+        <li><a href="/Admin/Teacher/">Teachers</a></li>
+        <li><a href="/Admin/Class/">Classes</a></li>
+        <li><a href="/Admin/Student/">Students</a></li>
+    </ul>
+
+    </div>
+    </header>
+
+
+
+
+
+
+
+
+
+            <div class="col-sm-6">
+            <div class="panel panel-info">
+             <div class="panel-heading"><p style="font-size:large"><h3>All Classes</h3> 
+
+
+             </div>
+             <div class="panel-body" style = "min-height:450px; max-height:450px; overflow-y:scroll">
+                 <!-- Table Showing Table -->
+                
+
+                 <table class="table" border="1">
+                     <tr>
+                         <td>ID</td>
+                         <td>Name</td>
+                         <td>Teacher ID</td>
+                     </tr>
+
+
+                     @{
+                         foreach (Class c in list){
+                         
+                             <tr>
+                                 <td> @c.ClassId</td>
+                                 <td> @c.Name </td>
+                                 <td> @c.TeacherId </td>
+                             </tr>
+                             
+                         }
+                         
+                      }
+                   
+
+                 </table>
+
+
+
+             </div>
+
+             </div>
+                </div>
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="col-sm-6">
+            <div class="panel panel-info">
+             <div class="panel-heading"><p style="font-size:large"><h3>Info</h3> 
+
+
+             </div>
+             <div class="panel-body" style = "min-height:450px; max-height:450px;">
+           
+                 Class Id: <input type="text" id="eid" name="eid"/> <button id="btn_get" name="btn_get">Get</button> <br /><br />
+                 <font size="4px">Name:</font>  <input type="text" id="e_name" name="e_name"/> <br /><br />
+
+
+                 <button id="btn_update" name="btn_update">Update Info</button><br /><br /><br /><br />
+
+                 <font  size="4px"><b>To Delete:</b></font><br/>
+
+                 Id: <input type="text" id="delId" name="delId" /> <button id="btnDel" name="btnDel">Delete</button> <br /><br />
+
+
+             </div>
+
+             </div>
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script>
+
+    $(document).ready(function () {
+
+        // Button Get Event Handling !!
+        $('#btn_get').click(function () {
+
+            var id = $('#eid').val();
+            if (id == null || id == "") {
+                alert("Id can never be empty");
+                return;
+            }
+            
+           // alert("clicked");
+
+            $.getJSON("/Admin/getClass?id=" + id, function (data) {
+
+                if (data.Name == "") {
+                    alert("No data");
+                    return
+                }
+                else {
+                    $('#e_name').val(data.Name);
+                    
+                }
+            });
+
+
+        });
+
+
+
+
+
+
+
+
+
+
+
+        // Update Btn Handler !!
+        $('#btn_update').click(function () {
+
+            var id = $('#eid').val();
+            var name = $('#e_name').val();
+          
+
+            if (name == "" || id == "") {
+                alert("Fields can never be empty !!");
+                return;
+            }
+
+
+
+            $.getJSON("/Admin/updateClass?id=" + id + "&name=" + name, function (data) {
+
+                if (data)
+                    window.location.replace("/Admin/Class/");
+                else
+                    alert("Unsuccessful !!")
+
+            })
+
+
+
+        });
+
+
+
+
+
+
+
+
+
+
+
+
+
+        $('#btnDel').click(function () {
+
+            var delId = $('#delId').val();
+            if (delId == "") {
+                alert("Fields can never be empty !!");
+                return;
+            }
+
+
+
+            $.getJSON("/Admin/deleteClass?id=" + delId, function (data) {
+
+
+                if (data) {
+                    alert("Successfully Deleted !!");
+                    window.location.replace("/Admin/Class/");
+                }
+                else
+                    alert("Deletion UnSuccessful !!")
+
+
+            });
+
+
+        });
+
+
+
+
+
+
+    });
+
+
+
+</script>

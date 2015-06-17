@@ -1,0 +1,126 @@
+﻿
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";   
+ }
+    
+@model EAD_Project.Models.Teacher
+
+    <header>
+    <!--WebSite Header-->
+    <div class="well well-sm">
+        <div class="row">
+            <div class="col-sm-1"></div>
+            <div class="col-sm-11"><h1><strong>My Class<small>.com</small></strong></h1></div>
+         </div>
+    </div>
+    </header>
+
+
+
+                <!--Teacher Registration Panel-->
+    <div class="row">
+        <div class="col-sm-4"></div>
+        <div class="col-sm-4">
+            <div class="panel panel-info">
+             <div class="panel-heading"><h3>Teacher Registration Form</h3></div>
+             <div class="panel-body">
+                 <!--Teacher Panel Content-->
+                 
+
+                 <form class="form" role="form" method="post" onsubmit="return validate()" action="/Teacher/TeacherSave/">
+                     <h3 style="font-style:oblique; color:brown">Personal Info:</h3>
+                     <font style="font-family:'Bodoni Bk BT'; font-size:x-large">Name:</font> @Html.TextBoxFor(tchr=>tchr.Name) <i>This is your Name</i> <br/>
+                     <font style="font-family:'Bodoni Bk BT'; font-size:x-large">Email:</font> @Html.TextBoxFor(tchr => tchr.Email, new { type="email" }) <i>Email helps in password recovery</i>
+
+                     <br />
+
+                     <h3 style="font-style:oblique; color:brown">Account Info:</h3>
+                     <font style="font-family:'Bodoni Bk BT'; font-size:x-large">UserName</font> @Html.TextBoxFor(tchr=>tchr.TeacherID)<i>Must be unique, used for LogIn</i><br />
+                     <font style="font-family:'Bodoni Bk BT'; font-size:x-large">Password:</font> @Html.TextBoxFor(tchr=>tchr.Password)
+                     
+
+                     <br /><br />
+
+                     <div class="row">
+                         <div class="col-sm-8"></div>
+                         <div class="col-sm-2">
+                             <input type="submit" class="btn btn-primary btn-lg"   value="Register Me !"/>
+                         </div>
+
+                     </div>
+
+                     
+                 </form>
+
+
+             </div>
+             </div>
+        </div>
+        </div>
+
+
+
+
+<!-- java Scripts for Validation-->
+<script>
+function validate(){
+
+    var userName = document.getElementById("Name").value;
+    var email = document.getElementById("Email").value;
+    var id = document.getElementById("TeacherID").value;
+    var pass = document.getElementById("Password").value;
+
+    if (userName == null || userName == "") {
+
+        alert("Fields can never be empty");
+        return false;
+    }
+
+
+    if (email == null || email == "") {
+
+        alert("Fields can never be empty");
+        return false;
+    }
+
+
+    if (id == null || id == "") {
+
+        alert("Fields can never be empty");
+        return false;
+    }
+
+
+    if (pass == null || pass == "") {
+        alert("Fields can never be empty");
+        return false;
+    }
+
+}
+
+
+
+
+
+var value = @(ViewBag.success)
+function onStart() {
+
+    if (value === 1) {
+        alert("Registration Successful !!");
+        window.location = "/Home/Index/"
+
+    }
+    else
+    {
+        alert("UserName already Exist, Try new One !!");
+    }
+    }
+
+
+
+
+
+
+
+</script>

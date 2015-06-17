@@ -1,0 +1,260 @@
+﻿
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";   
+ }
+    
+
+
+
+@using EAD_Project.Models
+
+@model Class
+
+@{
+    if (Session["userName"] == null || Session["password"] == null)
+    {
+
+        Response.Redirect("/Admin/errorPage/");
+    }
+    String stuid = Request["id"];
+    MyClassEntities cntxt = new MyClassEntities();
+    Student stu = cntxt.Students.Find(stuid);
+    
+    
+    
+    // All classes From TStudent
+
+    
+    var list = cntxt.StuClasses.Where(x => x.StuID == stuid).ToList();
+    List<Class> classes = new List<Class>();
+    
+    foreach (StuClass sc in list){
+    
+        Class c = cntxt.Classes.First(x=>x.ClassId==sc.ClassID);
+        classes.Add(c);
+        
+    }
+    
+  //  var classes = cntxt.Students.Find(stuid).Classes;
+    
+}
+
+
+        <header>
+    <!--WebSite Header-->
+    <div class="well well-sm">
+        <div class="row">
+            <div class="col-sm-1"></div>
+            <div class="col-sm-7"><h1><strong>My Class<small>.com</small></strong></h1></div>
+            <div class="col-sm-1"> <strong> <a style="font-size:x-large" href="/Student/StudentHome/?userName=@stuid">Home</a> </strong> </div>
+            <div class="col-sm-1"> <strong> <a style="font-size:x-large" href="#" onclick="goToHome()">Log Out</a> </strong> </div>
+         </div>
+
+    </div>
+    </header>
+
+
+
+
+
+    <div class="row">
+
+        <div class="col-sm-2"></div>
+        <div class="col-sm-4">
+            <div class="panel panel-info">
+             <div class="panel-heading"><p style="font-size:large"><h3>User Info</h3> 
+
+
+             </div>
+             <div class="panel-body" style = "min-height:250px; max-height:250px; overflow-y:scroll">
+                 <!--Info is here-->
+                <h3><u>Personal Info:</u></h3>
+                <font style="font-size:large"><b> Name: </b></font> <font style="font-family:Arial; font-size:large"> @stu.Name</font> <br />
+                <font style="font-size:large"><b> Email: </b></font> <font style="font-family:Arial; font-size:large">@stu.Email</font> <br />
+                  
+                 <h3><u>Personal Info:</u></h3>
+                 <font style="font-size:large"><b> User: </b></font> <font style="font-family:Arial; font-size:large">@stu.StudentID</font> <br />
+
+             </div>
+
+             </div>
+        </div>
+
+        
+        
+        
+        <div class="col-sm-4">
+            <div class="panel panel-info">
+             <div class="panel-heading"><p style="font-size:large"><h3>Classes Joined</h3> 
+
+
+             </div>
+             <div class="panel-body" style = "min-height:250px; max-height:250px;">
+                 <!--Class List is here-->
+               
+
+                 <select size="10px" class="form-control" id="c_list" name="c_list">
+          
+                    @foreach(Class clas in classes){
+                    
+                              <option value="@clas.ClassId">@clas.Name</option>
+                    }
+                </select>
+
+
+             </div>
+
+             </div>
+        </div>
+
+
+    </div>
+    
+    
+    
+    <div class="row">
+        <div class="col-sm-2"></div>
+        <div class="col-sm-4">
+        </div>
+        <div class="col-sm-2">
+            <button class="btn btn-success btn-lg" data-toggle="modal" data-target="#addClassModal">Add New Class</button>
+        </div>
+        <div class="col-sm-3">
+            <form action="/Student/leaveClass/" method="get">
+            <input type="text" value="@stuid" id="stuName" name="stuName" hidden="hidden">
+            <input type="text" id="classID" name="classID" hidden="hidden" />
+            <input type="submit" value="Leave Selected Class" class="btn btn-danger btn-lg"/>
+            </form>
+        </div>
+    </div>
+
+
+
+
+
+
+
+
+
+    <!--Here are Modles------------------------------------------------------------------->
+
+    <div class="container">
+
+  <!-- Modal Add New Class -->
+  <div class="modal fade" id="addClassModal" role="dialog">
+    <div class="modal-dialog">
+    
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">Add New Class</h4>
+        </div>
+        <div class="modal-body">
+            <!--Here is body of Model-->
+           
+        
+            Class ID : <input type="text" placeholder="Enter Class Id"/ id="n_cid" name="n_cid"> 
+            <button id="n_add" name="n_add">ADD</button>
+        
+        </div>
+        <div class="modal-footer">
+       
+        </div>
+      </div>
+      
+    </div>
+  </div>
+  
+</div>
+
+
+
+
+
+
+
+
+<!--Here are Scripts-->
+
+    <script>
+
+        function goToStudentHome() {
+                window.location = "/Student/StudentHome/";
+        }
+
+
+        function goToHome() {
+            window.location = "http://localhost:26662/";
+        }
+
+
+
+
+
+
+
+
+
+
+        $(document).ready(function () {
+
+         
+
+            $('#c_list').change(function () {
+
+                var selected = $(this).find('option:selected');
+                $('#classID').val(selected.val());
+                
+
+            })
+
+
+
+
+
+
+            // For addition of Class
+
+            $('#n_add').click(function () {
+
+                if ($('#n_cid').val() == null || $('#n_cid').val() == "") {
+                    alert("Fields can never Empty");
+                    return;
+                }
+
+
+                var stuId = "@stuid";
+                var cid = $('#n_cid').val();
+
+
+                $.getJSON("/Student/addClass?stuId=" + stuId + "&classId=" + cid , function (data) {
+
+                    if (data) {
+                        alert("Added Successfully !!");
+                        window.location.replace("/Student/StudentHome/?userName=" + stuId);
+                    }
+                    else
+                        alert("Operation Unsuccessfull !!");
+
+                });
+
+
+
+
+            });
+
+
+
+
+
+
+        });
+
+
+
+
+
+    </script>
+

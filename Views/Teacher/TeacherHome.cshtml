@@ -1,0 +1,349 @@
+﻿
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    
+}
+
+
+     
+    
+
+
+@using EAD_Project.Models
+@model TeacherHome
+
+
+
+
+@{
+    if (Session["userName"] == null || Session["password"] == null){
+
+        Response.Redirect("/Admin/errorPage/");
+    }
+    
+    String tchrId = Request["userName"];
+    Session["userName"] = tchrId;
+   
+    String classId = Request["classId"];
+    Session["classId"] = classId;
+    
+    
+}
+    
+    <header>
+    <!--WebSite Header-->
+    <div class="well well-sm">
+        <div class="row">
+            <div class="col-sm-1"></div>
+            <div class="col-sm-7"><h1><strong>My Class<small>.com</small></strong></h1></div>
+            <div class="col-sm-1"> <strong> <a style="font-size:x-large" href="/Teacher/TeacherProfile/?id=@Model.teacher.TeacherID">@Model.teacher.Name</a> </strong> </div>
+            <div class="col-sm-1"> <strong> <a style="font-size:x-large" href="#" onclick="goToHome()">Log Out</a> </strong> </div>
+         </div>
+        <div class="row">
+            <div class="col-sm-4"></div>
+            <div class="col-sm-4">
+               
+            </div>
+            
+        </div>
+    </div>
+        
+    </header>
+
+
+
+                <!--Lecture List Panel-->
+    <div class="row">
+       
+
+        <!-- Coloumn 1 In which Lecture list will load-->
+        <div class="col-sm-2">
+
+            <div class="panel panel-default">
+                <div class="panel-heading">Select Class: </div>
+              
+              <select class="form-control" id="subjects" name="subjects">
+              
+                  @{
+                    foreach(Class c in Model.classes)
+                    {    
+                    <option value ="@c.ClassId"> @c.Name </option>
+                    }
+                 }
+
+              </select>
+           
+            </div>
+            
+            
+            
+
+
+            <div class="panel panel-info">
+             <div class="panel-heading"><p style="font-size:large"><h3>Lectures</h3> 
+
+
+             </div>
+             <div class="panel-body" style = "min-height:430px; max-height:500px;">
+                 <!--List is here-->
+                 <select  id="lecList" size="20" style="width:220px">
+                @*@{
+                    var lecs = cntxt.Lectures.Where(x=>x.ClassID==classId).ToList();
+                   
+                    
+                    
+                    foreach(Lecture lec in lecs)
+                    {
+
+                        String un = tchrId;    
+                     
+                    <li><a href="/Teacher/TeacherHome/?userName=@tchrId&classId=@classId&lec_path=@lec.Name"> @lec.Name </a></li>
+                    }
+                    
+                 }*@
+                </select>
+
+             </div>
+             </div>
+
+        <form role="form" action="/Teacher/UpLoadLec" method="post" enctype="multipart/form-data"> 
+            <div style="background-color:wheat" class="form-group">
+               <input type="file" name="uFile" id="uFile"/>
+                <input type="text" value="@tchrId" id="tchrId" name="tchrId" hidden="hidden" />
+                <input type="text" value="@classId" id="classId" name="classId" hidden="hidden" />
+                <input type="submit" value="UpLoad" />
+            </div>
+
+        </form>
+        
+        </div>
+
+
+
+
+
+
+        <!-- Coloumn 2 In which Lecture will load (pdf)-->
+        <div class="col-sm-7">
+            <div class="panel panel-info">
+             <div class="panel-heading"><h3>Currently Loaded Lecture</h3> </div>
+             <div class="panel-body" style = "min-width:500px; min-height:630px; max-height:500px;  overflow-x:scroll">
+                 
+               
+               
+                     
+                    <embed id="lec" name="lec" width=1000px height=1200px/>     
+                
+                      
+
+
+             </div>
+             </div>
+        </div>
+
+
+
+
+
+
+
+        <!-- Coloumn 3 In which Notifications list will load-->
+        <div class="col-sm-3">
+            <div class="panel panel-info">
+             <div class="panel-heading"><h3>Announcments</h3> </div>
+             <div class="panel-body" style = "min-height:430px; max-height:500px; overflow-y:scroll">
+                 <!--Notifications are here-->
+                 
+
+                 <!--List is here-->
+                 <ul id ="ann">
+              @*@{
+                  var anns = cntxt.Announcments.Where(x => x.ClassID == classId).ToList();
+
+
+
+                  foreach (Announcment ans in anns)
+                  {
+
+                         
+                     
+                    <li><b> @ans.Announment </b> </li>
+                  }
+                    
+                 }*@
+
+                </ul>
+
+
+             </div>
+             </div>
+
+            <form method="get" action="/Teacher/Announcement/" onsubmit="return validate()">
+            Announcment: <input type="text" id="an" name="an" />
+                
+
+                <input type="text" value="@tchrId" id="t_Id" name="t_Id" hidden="hidden" />
+                <input type="text"   id="c_id" name="c_id" hidden="hidden" />
+                <input class="btn btn-primary btn-small" type="submit" value="Announce" />
+           
+           </form>
+       
+            
+      </div>
+
+
+
+
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <!--Here are Scripts-->
+
+    <script>
+
+        function goToTeacherProfile() {
+            window.location = "/Teacher/TeacherProfile/";
+        }
+
+
+        function goToHome() {
+
+
+            window.location = "http://localhost:26662/";
+
+        }
+
+
+
+        function validate() {
+
+            var ann = document.getElementById("an").value;
+
+            if (ann == null || ann == "") {
+
+                alert("Fields can never be empty");
+                return false;
+            }
+
+        }
+
+
+
+
+
+
+
+
+
+
+        $(document).ready(function () {
+
+            
+            // Lec list update handling
+            $('#subjects').change(function () {
+
+
+                
+                $("#lecList option").remove();
+                var classId = $('#subjects').val();
+                
+                
+                
+                $.getJSON("/Teacher/getLectures?classId="+ classId, function (data) {
+                    $.each(data, function (i, item) {
+                       
+                       
+                        var id = '@tchrId';
+                      
+                        var path = item.Path;
+
+                        $("#lecList").append("<option value =" + path + ">" + item.Name + "</option>")
+                        
+                    });
+                } 
+
+                )});
+
+
+
+
+
+
+
+
+
+
+
+            // Announcment list update handling
+            $('#subjects').change(function () {
+
+                $("#ann li").remove();
+                var classId = $('#subjects').val();
+                
+               
+                $('#c_id').val(classId);
+                $('#classId').val(classId);
+                
+
+                $.getJSON("/Teacher/getAnnouncments?classId=" + classId, function (data) {
+                    
+                    $.each(data, function (i, item) {
+
+                       
+                        var id = '@tchrId';
+
+
+                        $("#ann").append("<li>" + item.Announment + "</li>")
+
+                    });
+                }
+
+                )
+            });
+
+
+
+
+
+
+
+            $('#lecList').change(function () {
+                var selected = $(this).find('option:selected');
+                var fullPath = selected.val() + '\\' + selected.text();
+               // alert(fullPath);
+                $('#lec').attr("src" ,"~/Files/"+selected.text());
+                }
+
+
+
+                )
+           
+
+
+
+
+
+
+            
+
+        });
+
+
+
+
+
+
+    </script>
+

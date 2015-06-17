@@ -1,0 +1,268 @@
+﻿@{
+    ViewBag.Title = "Teacher";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    if (Session["userName"] == null || Session["password"] == null)
+    {
+
+        Response.Redirect("/Admin/errorPage/");
+    }
+}
+
+
+
+
+@using EAD_Project.Models
+
+@{
+    MyClassEntities cntxt = new MyClassEntities();
+    List<Teacher> list = cntxt.Teachers.ToList();
+}
+
+
+
+
+
+
+
+<header>
+    <!--WebSite Header-->
+    <div class="well well-sm">
+        <div class="row">
+            <div class="col-sm-1"></div>
+            <div class="col-sm-7"><h1><strong>My Class<small>.com</small></strong></h1></div>
+            <div class="col-sm-1"> <strong> <a style="font-size:x-large" href="/Home/Index/">Log Out</a> </strong> </div>
+         </div>
+
+        <ul class="nav nav-pills">
+        <li><a href="/Admin/AdminDashBoard/">DashBoard</a></li>
+        <li><a href="/Admin/Teacher/">Teachers</a></li>
+        <li><a href="/Admin/Class/">Classes</a></li>
+        <li><a href="/Admin/Student/">Students</a></li>
+    </ul>
+
+    </div>
+    </header>
+
+
+
+
+
+
+
+
+
+
+
+            <div class="col-sm-6">
+            <div class="panel panel-info">
+             <div class="panel-heading"><p style="font-size:large"><h3>All Teachers</h3> 
+
+
+             </div>
+             <div class="panel-body" style = "min-height:450px; max-height:450px; overflow-y:scroll">
+                 <!-- Table Showing Table -->
+                
+
+                 <table class="table" border="1">
+                     <tr>
+                         <td>ID</td>
+                         <td>Name</td>
+                         <td>Email</td>
+                     </tr>
+
+                     @{
+                        foreach(Teacher tchr in list){
+                        
+                            <tr>
+                                <td>
+                                    @tchr.TeacherID
+                                </td>
+                                <td>
+                                    @tchr.Name
+                                </td>
+                                <td>
+                                    @tchr.Email
+                                </td>
+                            </tr>
+                        
+                        }  
+                      }
+
+                 </table>
+
+
+
+             </div>
+
+             </div>
+                </div>
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="col-sm-6">
+            <div class="panel panel-info">
+             <div class="panel-heading"><p style="font-size:large"><h3>Info</h3> 
+
+
+             </div>
+             <div class="panel-body" style = "min-height:450px; max-height:450px;">
+           
+                 Id: <input type="text" id="eid" name="eid"/> <button id="btn_get" name="btn_get">Get</button> <br /><br />
+                 <font size="4px">Name:</font>  <input type="text" id="e_name" name="e_name"/> <br /><br />
+                 <font size="4px">Email:</font>  <input type="text" id="e_email" name="e_email"/> <br /><br />
+                 <font size="4px">Pass:</font>  <input type="text" id="e_pass" name="e_pass"/> <br /><br />
+
+
+                 <button id="btn_update" name="btn_update">Update Info</button><br /><br /><br /><br />
+
+                 <font  size="4px"><b>To Delete:</b></font><br/>
+
+                 Id: <input type="text" id="delId" name="delId" /> <button id="btnDel" name="btnDel">Delete</button> <br /><br />
+
+
+             </div>
+
+             </div>
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script>
+
+    $(document).ready(function () {
+
+        // Button Get Event Handling !!
+        $('#btn_get').click(function () {
+
+            var id = $('#eid').val();
+            if (id == null || id == "") {
+                alert("Id can never be empty");
+                return;
+            }
+            
+           // alert("clicked");
+
+            $.getJSON("/Admin/getTeacher?id=" + id, function (data) {
+
+                if (data.Name == "") {
+                    alert("No data");
+                    return
+                }
+                else {
+                    $('#e_name').val(data.Name);
+                    $('#e_email').val(data.Email);
+                    $('#e_pass').val(data.Password);
+                }
+            });
+
+
+        });
+
+
+
+
+
+
+
+
+
+
+
+        // Update Btn Handler !!
+        $('#btn_update').click(function () {
+
+            var id = $('#eid').val();
+            var name = $('#e_name').val();
+            var email = $('#e_email').val();
+            var pass = $('#e_pass').val();
+
+            if (name == "" || email == "" || pass == "" || id == "") {
+                alert("Fields can never be empty !!");
+                return;
+            }
+
+
+
+            $.getJSON("/Admin/updateTeacher?id=" + id + "&name=" + name + "&email=" + email + "&password=" + pass, function (data) {
+
+                if (data)
+                    window.location.replace("/Admin/Teacher/");
+                else
+                    alert("Unsuccessful !!")
+
+            })
+
+
+
+        });
+
+
+
+
+
+
+
+
+
+
+
+
+
+        $('#btnDel').click(function () {
+
+            var delId = $('#delId').val();
+            if (delId == "") {
+                alert("Fields can never be empty !!");
+                return;
+            }
+
+
+
+            $.getJSON("/Admin/deleteTeacher?id=" + delId, function (data) {
+
+
+                if (data) {
+                    alert("Successfully Deleted !!");
+                    window.location.replace("/Admin/Teacher/");
+                }
+                else
+                    alert("Deletion UnSuccessful !!")
+
+
+            });
+
+
+        });
+
+
+
+
+
+
+    });
+
+
+
+</script>

@@ -1,0 +1,229 @@
+﻿
+<!DOCTYPE html>
+
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    Session["userName"] = null;
+    Session["password"] = null;
+}
+
+@model EAD_Project.Models.UserCredentials
+
+<!--I am inside Body-->
+
+    
+        
+    
+    <header>
+    <!--WebSite Header-->
+    <div class ="panel">
+        <div class="row">
+            <div class="col-sm-1"></div>
+            <div class="col-sm-7">   <h3><strong>My Class<small>.com</small></strong></h3>    </div>
+            <div class="col-sm-1"> <strong> <a style="font-size:medium" href="#" data-toggle="modal" data-target="#logInModal">LogIn</a> </strong> </div>
+            <div class="col-sm-1"> <strong> <a style="font-size:medium" href="#" data-toggle="modal" data-target="#registerModal">Register</a> </strong> </div>
+        </div>
+    </div>
+        </header>
+
+
+
+    <!--Site Info-->
+
+    <div class="container">
+  <div class="jumbotron">
+    <h1>MyClass<small>.com</small></h1>
+    <p>MyClass.com is online virtual class room which helps teachers and students to collaborate eaisly. Teachers 
+        upload pdf lectures and students having same class can get them.Seems Interseting? <a href="#"data-toggle="modal" data-target="#registerModal">Register Now !!</a>
+    </p>
+  </div>
+</div>
+
+
+
+    <!--Teachers and students Panels-->
+
+            <!--Student Panel-->
+    <div class="row">
+        <div class="col-sm-1"></div>
+        <div class="col-sm-4">
+            <div class="panel panel-info">
+             <div class="panel-heading"><h3>For Students</h3></div>
+             <div class="panel-body">
+                 <!--Student Panel Content-->
+                 <p style="font-size:large; font:medium"><strong> Do you ever want to have all class room lectures in a single place?</strong></p>
+                 <p style="font-size:large">Of course you did, Myclass.com turns this into reality.</p>
+                 <p style="font-size:large">MyClass.com is a platform for Teachers and students to communicate eaisly, All you
+                     need to do is create an Account or logIn through an existing account. Search your teacher and join your desired
+                     class. You can access all the lectures, resource meterials, Notifications uploaded by teacher.
+                 </p>
+                 <p style="font-size:larger">Now why are you waiting for? <a href="#" data-toggle="modal" data-target="#registerModal"><strong> Register Now </strong></strong></a> and Enjoy Study !!</p>
+             </div>
+             </div>
+        </div>
+       
+                <!--Teacher Panel-->
+        <div class="col-sm-2"></div>
+         <div class="col-sm-4">
+            <div class="panel panel-info">
+             <div class="panel-heading"><h3>For Teachers</h3></div>
+             <div class="panel-body">
+
+                 <!--Teacher Content-->
+                 <p style="font-size:large; font:medium"><strong> Do you ever want to have all class room lectures in a single place?</strong></p>
+                 <p style="font-size:large">Of course you did, Myclass.com turns this into reality.</p>
+                 <p style="font-size:large">MyClass.com is a platform for Teachers and students to communicate eaisly, All you
+                     need to do is create an Account or logIn through an existing account. Make a Class, Add students, and start uploading
+                     lectures and Resource meterials which are shared with your students.
+                 </p>
+                 <p style="font-size:larger">Now why are you waiting for? <a href="#" data-toggle="modal" data-target="#registerModal"><strong> Register Now</strong></a> and Enjoy Teaching !!</p>
+
+
+             </div>
+             </div>
+        </div>
+
+    </div>
+
+
+
+
+
+    <!--Footer-->
+    <footer>
+        <div class="panel panel-default">
+  <div class="panel-body">EAD Term Project by BITF12A024</div>
+</div>
+    </footer>
+
+
+    <!-- PAGE DESIGN Compelete, Additional Work-->
+
+
+
+
+    <!--This is LogIn Model-->
+
+
+<div class="container">
+
+  <!-- Modal -->
+  <div class="modal fade" id="logInModal" role="dialog">
+    <div class="modal-dialog">
+    
+      <!-- Modal content-->
+     <!-- <form action="/Home/HomeLogIn/" method="post" onsubmit="return validate()"> -->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">Log In</h4>
+        </div>
+        <div class="modal-body">
+            <!--Here is body of Model-->
+
+         <strong> UserName: </strong> <input type="text" name="userName" id="userName">  <br/><br />
+         <strong> Password:</strong>  <input type="password" name="password" id="password"> <br/>
+      
+        </div>
+        <div class="modal-footer">
+          <input type="button" value="LogIn" class="btn btn-default" name ="logInButton" id="logInButton"/>
+      
+        </div>
+      </div>
+      <!--  </form>   -->
+      
+    </div>
+  </div>
+  
+</div>
+
+
+
+
+
+
+
+
+
+        <!--This is RegisterIn Model-->
+
+
+<div class="container">
+
+  <!-- Modal -->
+  <div class="modal fade" id="registerModal" role="dialog">
+    <div class="modal-dialog">
+    
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">Register Me</h4>
+        </div>
+        <div class="modal-body">
+            <!--Here is body of Model-->
+         <a href="/Teacher/TeacherRegistrationForm/" class="btn btn-primary btn-block"><font style="font-size:xx-large">I am a Teacher</font></a>
+         <a href="/Student/StudentRegistrationForm/" class="btn btn-success btn-block"><font style="font-size:xx-large">I am a Student</font></a>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+      
+    </div>
+  </div>
+  
+</div>
+
+
+
+
+
+<!--Here are Scripts-->
+
+    <script>
+    
+        $(document).ready(function () {
+
+            $('#logInButton').click(function () {
+
+                
+
+                var userName = $('#userName').val();
+                var password = $('#password').val();
+
+                if (userName == null || userName == "") {
+
+                    alert("Fields can never be empty");
+                    return false;
+                }
+
+
+                if (password == null || password == "") {
+
+                    alert("Fields can never be empty");
+                    return false;
+                }
+                
+
+                
+                $.getJSON("/Home/HomeLogIn?userName=" + userName +"&password=" + password, function (data) {
+
+                    if(data != "")
+                        window.location.replace(data);
+                    else
+                        alert("Not Exist !!")
+
+                });
+
+            });
+
+        });
+
+
+
+    </script>
+
+
+

@@ -1,0 +1,317 @@
+﻿
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";   
+ }
+
+
+@using EAD_Project.Models
+
+@model Class
+
+@{
+    
+    if (Session["userName"] == null || Session["password"] == null)
+    {
+        Response.Redirect("/Admin/errorPage/");
+    }
+    
+        String tchrid = Request["id"];
+        MyClassEntities cntxt = new MyClassEntities();
+        Teacher tchr = cntxt.Teachers.Find(tchrid);
+    
+
+
+        // All classes From Teacher
+        var classes = cntxt.Teachers.Find(tchrid).Classes;
+
+    }
+
+
+
+
+
+            <header>
+    <!--WebSite Header-->
+    <div class="well well-sm">
+        <div class="row">
+            <div class="col-sm-1"></div>
+            <div class="col-sm-7"><h1><strong>My Class<small>.com</small></strong></h1></div>
+            <div class="col-sm-1"> <strong> <a style="font-size:x-large" href="/Teacher/TeacherHome/?userName=@tchrid">Home</a> </strong> </div>
+            <div class="col-sm-1"> <strong> <a style="font-size:x-large" href="#" onclick="goToHome()">Log Out</a> </strong> </div>
+         </div>
+
+    </div>
+    </header>
+
+
+
+
+     <div class="row">
+
+        <div class="col-sm-3">
+            <div class="panel panel-info">
+             <div class="panel-heading"><p style="font-size:large"><h3>User Info</h3> 
+
+
+             </div>
+             <div class="panel-body" style = "min-height:250px; max-height:250px; overflow-y:scroll">
+                 <!--Info is here-->
+                <h3><u>Personal Info:</u></h3>
+                <font style="font-size:large"><b> Name: </b></font> <font style="font-family:Arial; font-size:large"> @tchr.Name</font> <br />
+                <font style="font-size:large"><b> Email: </b></font> <font style="font-family:Arial; font-size:large"> @tchr.Email</font> <br />
+                  
+                 <h3><u>Personal Info:</u></h3>
+                 <font style="font-size:large"><b> User: </b></font> <font style="font-family:Arial; font-size:large">@tchr.TeacherID</font> <br />
+
+             </div>
+
+             </div>
+        </div>
+
+        
+        
+        
+        <div class="col-sm-3">
+            <div class="panel panel-info">
+             <div class="panel-heading"><p style="font-size:large"><h3>Classes Created</h3> 
+
+
+             </div>
+             <div class="panel-body" style = "min-height:250px; max-height:250px;">
+                 <!--Class List is here-->
+                <select size="10px" class="form-control" name="c_list" id="c_list">
+          
+                    @foreach(Class clas in classes){
+                    
+                              <option value="@clas.ClassId">@clas.Name</option>
+                    }
+                </select>
+
+             </div>
+
+             </div>
+        </div>
+
+
+
+
+
+
+
+
+
+    </div>
+    
+    
+    
+    <div class="row">
+        <div class="col-sm-3">
+            <button class="btn btn-warning btn-lg" data-toggle="modal" data-target="#editInfoModal">Edit Info</button>
+        </div>
+        <div class="col-sm-1">
+            <button class="btn btn-success btn-lg" data-toggle="modal" data-target="#addClassModal">Add Class</button>
+        </div>
+        <div class="col-sm-2">
+
+            <form action="/Teacher/delClass" method="get">
+            <input type="text" id="classID" name="classID" hidden="hidden">
+            <input value="@tchrid" type="text" id="c_tchrID" name="c_tchrID" hidden="hidden" />
+            <input type="submit" class="btn btn-danger btn-lg" value="Delete Class" />
+            </form>
+        </div>
+
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <!--Here are Modles------------------------------------------------------------------->
+
+
+
+    <div class="container">
+
+  <!-- Modal Edit Infor -->
+  <div class="modal fade" id="editInfoModal" role="dialog">
+    <div class="modal-dialog">
+    
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">Edit Info</h4>
+        </div>
+        <div class="modal-body">
+            <!--Here is body of Model-->
+           
+            <form method="get" action="/Teacher/editTeacherInfo/">
+            Name: <input type="text" value="@tchr.Name" name="name" id="name">
+            Email: <input type="text" value="@tchr.Email" name="email" id="email">
+            <input type="text" id="id" name="id" value="@tchrid" hidden="hidden">
+            <input type="submit" value="Update" class="btn btn-default"/>
+            </form>
+        </div>
+        <div class="modal-footer">
+          
+        </div>
+      </div>
+      
+    </div>
+  </div>
+  
+</div>
+
+
+
+
+
+
+
+
+
+
+
+    <div class="container">
+
+  <!-- Modal Add New Class -->
+  <div class="modal fade" id="addClassModal" role="dialog">
+    <div class="modal-dialog">
+    
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">Add New Class</h4>
+        </div>
+          <form method="get" action="/Teacher/ClassSave/" onsubmit="return validate()">
+        <div class="modal-body">
+            <!--Here is body of Model-->
+           
+            
+           
+                Class Name: <input type="text" name="className" id ="className">
+                Class ID:   <input type="text" name="classId" id ="classId">
+               <input type="text" name="tchrId" id ="tchrId" value="@tchr.TeacherID" hidden="hidden">
+               
+            
+           
+        
+        </div>
+        <div class="modal-footer">
+          <input type="Submit" value="Add" class="btn btn-default"/>
+        </div>
+        </form>
+      </div>
+      
+    </div>
+  </div>
+  
+</div>
+
+
+
+
+
+
+
+
+<!--Here are Scripts-->
+
+    <script>
+
+
+
+        function goToHome() {
+            window.location = "http://localhost:26662/";
+        }
+
+
+
+
+        function validate() {
+
+            var className = document.getElementById("className").value;
+            var classId = document.getElementById("classId").value;
+
+            if (className == null || className == "") {
+
+                alert("Fields can never be empty");
+                return false;
+            }
+
+
+            if (classId == null || classId == "") {
+
+                alert("Fields can never be empty");
+                return false;
+            }
+
+        }
+
+    
+        function onStart() {
+
+            var v = getParameterByName("success");
+            
+            if (v == "false") {
+                alert("Unsuccessful !!");
+            }
+        
+
+        }
+
+
+
+
+
+
+        function getParameterByName(name) {
+            name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+            var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
+                results = regex.exec(location.search);
+            return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+        $(document).ready(function () {
+
+            $('#c_list').change(function () {
+
+                var selected = $(this).find('option:selected');
+                $('#classID').val(selected.val());
+                //$('#c_tchrID').val(selected.val());
+
+            })
+
+
+        })
+
+
+
+
+
+
+
+    </script>

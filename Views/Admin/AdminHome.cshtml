@@ -1,0 +1,292 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    if (Session["userName"] == null || Session["password"] == null)
+    {
+
+        Response.Redirect("/Admin/errorPage/");
+    }
+ }
+    <header>
+    <!--WebSite Header-->
+    <div class="well well-sm">
+        <div class="row">
+            <div class="col-sm-1"></div>
+            <div class="col-sm-7"><h1><strong>My Class<small>.com</small></strong></h1></div>
+            <div class="col-sm-1"> <strong> <a style="font-size:x-large" href="#" onclick="goToTeacherHome()">Home</a> </strong> </div>
+            <div class="col-sm-1"> <strong> <a style="font-size:x-large" href="/Home/Index/" onclick="goToHome()">Log Out</a> </strong> </div>
+         </div>
+
+    </div>
+    </header>
+
+    <ul class="nav nav-pills">
+        <li><a href="/Admin/AdminHome/">AdminHome</a></li>
+        <li><a href="/Admin/AdminDashBoard/">Admin DashBoard</a></li>
+        <li><a href="#">Website Statistics</a></li>
+        <li><a href="#">Edit Site Contents</a></li>
+    </ul>
+
+
+
+
+
+         <div class="row">
+
+        <div class="col-sm-3">
+            <div class="panel panel-info">
+             <div class="panel-heading"><p style="font-size:large"><h3>User Info</h3> 
+
+
+             </div>
+             <div class="panel-body" style = "min-height:250px; max-height:250px; overflow-y:scroll">
+                 <!--Info is here-->
+                <h3><u>Personal Info:</u></h3>
+                <font style="font-size:large"><b> Name: </b></font> <font style="font-family:Arial; font-size:large"> Asher</font> <br />
+                <font style="font-size:large"><b> Email: </b></font> <font style="font-family:Arial; font-size:large"> ashergi@yahoo.com</font> <br />
+                  
+                 <h3><u>Personal Info:</u></h3>
+                 <font style="font-size:large"><b> User: </b></font> <font style="font-family:Arial; font-size:large"> ash24</font> <br />
+
+             </div>
+
+             </div>
+        </div>
+
+        
+        
+        
+        <div class="col-sm-3">
+
+            <form class="navbar-form" role="search">
+        <div class="input-group">
+            <input type="text" class="form-control" placeholder="Search" name="srch-term" id="srch-term">
+            <div class="input-group-btn">
+                <button class="btn btn-default" type="submit"><i class="glyphicon glyphicon-search"></i></button>
+            </div>
+        </div>
+        </form>
+
+            <div class="panel panel-info">
+             <div class="panel-heading"><p style="font-size:large"><h3>Teachers</h3> 
+
+
+             </div>
+             <div class="panel-body" style = "min-height:250px; max-height:250px;">
+                 <!--Class List is here-->
+                <select size="10px" class="form-control">
+                <option value="one">Teacher 1</option>
+                <option value="two">Teacher 2</option>
+                <option value="three">Teacher 3</option>
+                </select>
+
+             </div>
+
+             </div>
+        </div>
+
+
+
+
+
+         <div class="col-sm-3">
+             <form class="navbar-form" role="search">
+        <div class="input-group">
+            <input type="text" class="form-control" placeholder="Search" name="srch-term" id="srch-term">
+            <div class="input-group-btn">
+                <button class="btn btn-default" type="submit"><i class="glyphicon glyphicon-search"></i></button>
+            </div>
+        </div>
+        </form>
+            <div class="panel panel-info">
+             <div class="panel-heading"><p style="font-size:large"><h3>Associated Classes</h3> 
+
+
+             </div>
+             <div class="panel-body" style = "min-height:250px; max-height:250px; ">
+                 <!--Info is here-->
+                
+                 <select size="10px" class="form-control">
+                <option value="one">EAD</option>
+                <option value="two">EAD Lab</option>
+                <option value="three">Android</option>
+                </select>
+
+             </div>
+             </div>
+        </div>
+
+
+
+
+
+         <div class="col-sm-3">
+
+             <form class="navbar-form" role="search">
+        <div class="input-group">
+            <input type="text" class="form-control" placeholder="Search" name="srch-term" id="srch-term">
+            <div class="input-group-btn">
+                <button class="btn btn-default" type="submit"><i class="glyphicon glyphicon-search"></i></button>
+            </div>
+        </div>
+        </form>
+
+            <div class="panel panel-info">
+             <div class="panel-heading"><p style="font-size:large"><h3>Enrolled Students</h3> 
+
+
+             </div>
+             <div class="panel-body" style = "min-height:250px; max-height:250px; ">
+                 <!--Info is here-->
+                
+                 <select size="10px" class="form-control">
+                <option value="one">Asher</option>
+                <option value="two">Talha</option>
+                <option value="three">Abdullah</option>
+                </select>
+
+             </div>
+             </div>
+        </div>
+
+
+
+
+
+    </div>
+    
+    
+    
+    <div class="row">
+        <div class="col-sm-3">
+            <button class="btn btn-warning btn-lg" data-toggle="modal" data-target="#editInfoModal">Edit Info</button>
+        </div>
+        <div class="col-sm-1">
+            <button class="btn btn-success btn-lg" data-toggle="modal" data-target="#addClassModal">Message</button>
+        </div>
+        <div class="col-sm-2">
+            <button class="btn btn-danger btn-lg">Remove</button>
+        </div>
+        <div class="col-sm-1">
+            <button class="btn btn-success btn-lg">Notify</button>
+        </div>
+
+        <div class="col-sm-2">
+            <button class="btn btn-danger btn-lg">Remove</button>
+        </div>
+
+
+        <div class="col-sm-1">
+            <button class="btn btn-success btn-lg">Message</button>
+        </div>
+
+        <div class="col-sm-1">
+            <button class="btn btn-danger btn-lg">Remove</button>
+        </div>
+
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <!--Here are Modles------------------------------------------------------------------->
+
+
+
+    <div class="container">
+
+  <!-- Modal Edit Infor -->
+  <div class="modal fade" id="editInfoModal" role="dialog">
+    <div class="modal-dialog">
+    
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">Edit Info</h4>
+        </div>
+        <div class="modal-body">
+            <!--Here is body of Model-->
+           
+            Your Editable Info Will Show Here !!
+        
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Update</button>
+        </div>
+      </div>
+      
+    </div>
+  </div>
+  
+</div>
+
+
+
+
+
+
+
+
+
+
+
+    <div class="container">
+
+  <!-- Modal Add New Class -->
+  <div class="modal fade" id="addClassModal" role="dialog">
+    <div class="modal-dialog">
+    
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">Add New Class</h4>
+        </div>
+        <div class="modal-body">
+            <!--Here is body of Model-->
+           
+           The form will coustomized accordingly !!
+        
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Add</button>
+        </div>
+      </div>
+      
+    </div>
+  </div>
+  
+</div>
+
+
+
+
+
+
+
+
+<!--Here are Scripts-->
+
+    <script>
+
+        function goToTeacherHome() {
+            window.location = "http://localhost:26662/";
+        }
+
+
+        function goToHome() {
+            window.location = "http://localhost:26662/";
+        }
+
+
+    </script>
